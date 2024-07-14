@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:osama_hasan_progress_soft/presentation/login_screen/bloc/login_bloc.dart';
+import 'package:osama_hasan_progress_soft/presentation/login_screen/login_screen.dart';
 import 'package:osama_hasan_progress_soft/util/assets.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -9,11 +12,17 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 2), () {
-
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BlocProvider(
+              create: (context) => LoginBloc(),
+              child: const LoginScreen(),
+            ),
+          ));
     });
     super.initState();
   }

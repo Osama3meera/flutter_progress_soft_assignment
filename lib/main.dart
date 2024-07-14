@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:osama_hasan_progress_soft/presentation/splash_screen/bloc/splash_bloc.dart';
 import 'package:osama_hasan_progress_soft/presentation/splash_screen/splash_screen.dart';
 
 void main() {
@@ -11,10 +13,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: false,
-      ),
-      home: const SplashScreen(),
-    );
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          useMaterial3: false,
+        ),
+        home: const SplashScreen());
   }
 }
