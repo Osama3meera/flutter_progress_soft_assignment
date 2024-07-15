@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "814513121974",
+    "project_id": "osama-hasan-progsoft1996",
+    "storage_bucket": "osama-hasan-progsoft1996.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814513121974:android:3f0df5793fe065a151d417",
+        "android_client_info": {
+          "package_name": "com.example.osamahasanprogsoft"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCY46jDRWtuAQBuhnIPKBXfhjr0fpYVwXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

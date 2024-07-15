@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCX_CVcNtLK3opr50T5KoZGOL54I8dIi5s</string>
+	<key>GCM_SENDER_ID</key>
+	<string>814513121974</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.osamahasanprogsoft</string>
+	<key>PROJECT_ID</key>
+	<string>osama-hasan-progsoft1996</string>
+	<key>STORAGE_BUCKET</key>
+	<string>osama-hasan-progsoft1996.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:814513121974:ios:8288b00c2642fbaa51d417</string>
+</dict>
+</plist>

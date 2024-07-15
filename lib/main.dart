@@ -1,9 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:osama_hasan_progress_soft/presentation/splash_screen/bloc/splash_bloc.dart';
 import 'package:osama_hasan_progress_soft/presentation/splash_screen/splash_screen.dart';
 
-void main() {
+Future<void> main() async {
+  MyApp.initApp();
   runApp(const MyApp());
 }
 
@@ -17,6 +17,16 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: false,
         ),
-        home: const SplashScreen());
+        home: SplashScreen());
+  }
+
+  static Future initApp() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyCY46jDRWtuAQBuhnIPKBXfhjr0fpYVwXo",
+            appId: "1:814513121974:android:3f0df5793fe065a151d417",
+            messagingSenderId: "814513121974",
+            projectId: "osama-hasan-progsoft1996"));
   }
 }
