@@ -9,11 +9,7 @@ import 'package:osama_hasan_progress_soft/presentation/register_screen/register_
 import 'package:osama_hasan_progress_soft/util/assets.dart';
 
 class LoginScreen extends StatefulWidget {
-  final String mobileRegex;
-  final String passwordRegex;
-
-  const LoginScreen(
-      {super.key, required this.mobileRegex, required this.passwordRegex});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -23,6 +19,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _mobileController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<LoginBloc>().add(LoadRegexEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state is LoginStartedState) {
-              // _login();
+              _login();
             }
           },
           builder: (context, state) {
@@ -71,7 +73,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your mobile number';
                       }
-                      if (!RegExp(widget.mobileRegex).hasMatch(value)) {
+                      if (!RegExp(context.read<LoginBloc>().mobileRegex ?? "")
+                          .hasMatch(value)) {
                         return 'Invalid mobile number';
                       }
                       return null;
@@ -96,7 +99,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
                       }
-                      if (!RegExp(widget.passwordRegex).hasMatch(value)) {
+                      if (!RegExp(context.read<LoginBloc>().passwordRegex ?? "")
+                          .hasMatch(value)) {
                         return 'Invalid password';
                       }
                       return null;
@@ -147,25 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _login() async {
-    String email = _mobileController.text.trim();
-    String password = _passwordController.text.trim();
-
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      if (userCredential.user != null) {
-        print("user found");
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        _showRegisterDialog();
-      } else if (e.code == 'wrong-password') {}
-    } catch (e) {
-      print('Error: $e');
+    if (_formKey.currentState!.validate()) {
     }
   }
 

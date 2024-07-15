@@ -51,8 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
           MaterialPageRoute(
             builder: (context) => BlocProvider(
               create: (context) => LoginBloc(),
-              child: LoginScreen(
-                  mobileRegex: mobileRegex, passwordRegex: passwordRegex),
+              child: LoginScreen(),
             ),
           ));
     });
