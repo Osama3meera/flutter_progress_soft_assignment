@@ -1,10 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:osama_hasan_progress_soft/presentation/login_screen/bloc/login_bloc.dart';
+import 'package:osama_hasan_progress_soft/presentation/register_screen/bloc/register_bloc.dart';
+import 'package:osama_hasan_progress_soft/presentation/register_screen/register_screen.dart';
 import 'package:osama_hasan_progress_soft/util/assets.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -35,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state is LoginStartedState) {
-             // _login();
+              // _login();
             }
           },
           builder: (context, state) {
@@ -104,12 +105,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  const Text(
-                    "Register",
-                    style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        fontSize: 18,
-                        color: Colors.blue),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider(
+                              create: (context) => RegisterBloc(),
+                              child: RegisterScreen(),
+                            ),
+                          ));
+                    },
+                    child: const Text("Register",
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontSize: 18,
+                            color: Colors.blue)),
                   ),
                   const SizedBox(
                     height: 20,
@@ -149,12 +160,10 @@ class _LoginScreenState extends State<LoginScreen> {
       if (userCredential.user != null) {
         print("user found");
       }
-
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         _showRegisterDialog();
-      } else if (e.code == 'wrong-password') {
-      }
+      } else if (e.code == 'wrong-password') {}
     } catch (e) {
       print('Error: $e');
     }
@@ -178,7 +187,6 @@ class _LoginScreenState extends State<LoginScreen> {
               child: const Text('Register'),
               onPressed: () {
                 Navigator.of(context).pop();
-
               },
             ),
           ],

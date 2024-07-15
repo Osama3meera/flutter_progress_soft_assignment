@@ -4,6 +4,8 @@ import 'package:osama_hasan_progress_soft/presentation/login_screen/bloc/login_b
 import 'package:osama_hasan_progress_soft/presentation/login_screen/login_screen.dart';
 import 'package:osama_hasan_progress_soft/util/assets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:osama_hasan_progress_soft/util/shared_preference/share_preference_helper.dart';
+import 'package:osama_hasan_progress_soft/util/shared_preference/shared_prefs_constants.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,9 +21,27 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _loadConfigData().whenComplete(() {
-      navigateToLoginScreen();
+
+    isConfigDataLoaded().then((value) {
+      if (!value) {
+        _loadConfigData().whenComplete(() {
+          navigateToLoginScreen();
+        });
+      } else {
+        navigateToLoginScreen();
+      }
     });
+  }
+
+  Future<bool> isConfigDataLoaded() async {
+    String? mobileRegex = await SharedPreferencesHelper.instance
+            .getString(SharedPrefsConstants.mobileRegex) ??
+        "";
+    String? passwordRegex = await SharedPreferencesHelper.instance
+            .getString(SharedPrefsConstants.passwordRegex) ??
+        "";
+
+    return mobileRegex.isNotEmpty && passwordRegex.isNotEmpty;
   }
 
   void navigateToLoginScreen() {
@@ -49,11 +69,13 @@ class _SplashScreenState extends State<SplashScreen> {
         Map<String, dynamic> data =
             configSnapshot.data() as Map<String, dynamic>;
 
-        data.forEach((key, value) {
+        data.forEach((key, value) async {
           if (key.trim() == "mobileRegex") {
-            mobileRegex = value;
+            await SharedPreferencesHelper.instance
+                .saveString(SharedPrefsConstants.mobileRegex, value);
           } else if (key.trim() == "passwordRegex") {
-            passwordRegex = value;
+            await SharedPreferencesHelper.instance
+                .saveString(SharedPrefsConstants.passwordRegex, value);
           }
         });
       } else {
