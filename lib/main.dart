@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:osama_hasan_progress_soft/presentation/splash_screen/splash_screen.dart';
 
 Future<void> main() async {
-  MyApp.initApp();
+  await MyApp.initApp();
   runApp(const MyApp());
 }
 
