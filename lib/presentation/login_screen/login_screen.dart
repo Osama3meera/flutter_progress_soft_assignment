@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:osama_hasan_progress_soft/presentation/home_screen/bloc/home_bloc.dart';
@@ -34,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Login Screen"),
+        title: Text('login_screen'.tr()),
         backgroundColor: Colors.indigo.shade700,
       ),
       body: SingleChildScrollView(
@@ -44,8 +45,8 @@ class _LoginScreenState extends State<LoginScreen> {
             listener: (context, state) {
               if (state is LoginSuccessState) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Login successful"),
+                  SnackBar(
+                    content: Text('login_success_msg'.tr()),
                     backgroundColor: Colors.green,
                   ),
                 );
@@ -56,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           MaterialPageRoute(
                             builder: (context) => BlocProvider(
                               create: (context) => HomeBloc(),
-                              child: HomeScreen(),
+                              child: const HomeScreen(),
                             ),
                           ),
                           (route) => false,
@@ -65,10 +66,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 showDialog(
                     context: context,
                     builder: (context) => SmartAlertDialog(
-                          title: "Error",
+                          title: 'error'.tr(),
                           message: state.error,
                           text: AlertDialogText(
-                              dismiss: "", confirm: "", cancel: "Close"),
+                              dismiss: "", confirm: "", cancel: 'close'.tr()),
                         ));
               } else if (state is UserNotRegisteredState) {
                 _showRegisterDialog();
@@ -76,10 +77,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 showDialog(
                     context: context,
                     builder: (context) => SmartAlertDialog(
-                          title: "Error",
-                          message: "Incorrect password",
+                          title: 'error'.tr(),
+                          message: 'incorrect_password'.tr(),
                           text: AlertDialogText(
-                              dismiss: "", confirm: "", cancel: "Close"),
+                              dismiss: "", confirm: "", cancel: 'close'.tr()),
                         ));
               }
             },
@@ -101,13 +102,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextFormField(
                       keyboardType: TextInputType.phone,
-                      decoration: const InputDecoration(
-                        labelText: "Mobile number",
-                        border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                        labelText: 'mobile_number'.tr(),
+                        border: const OutlineInputBorder(
                           borderSide: BorderSide(),
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                         ),
-                        errorBorder: OutlineInputBorder(
+                        errorBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.red, width: 2),
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                         ),
@@ -115,11 +116,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _mobileController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your mobile number';
+                          return 'please_enter_mobile'.tr();
                         }
                         if (!RegExp(context.read<LoginBloc>().mobileRegex ?? "")
                             .hasMatch(value)) {
-                          return 'Please enter a valid mobile number starting with +9627';
+                          return 'valid_mobile_msg'.tr();
                         }
                         return null;
                       },
@@ -129,13 +130,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextFormField(
                       obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: "Password",
-                        border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                        labelText: 'password'.tr(),
+                        border: const OutlineInputBorder(
                           borderSide: BorderSide(),
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                         ),
-                        errorBorder: OutlineInputBorder(
+                        errorBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.red, width: 2),
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                         ),
@@ -143,12 +144,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _passwordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
+                          return 'please_enter_password'.tr();
                         }
                         if (!RegExp(
                                 context.read<LoginBloc>().passwordRegex ?? "")
                             .hasMatch(value)) {
-                          return 'Password with min 8 characters, letters and numbers';
+                          return 'valid_password_msg'.tr();
                         }
                         return null;
                       },
@@ -163,14 +164,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           MaterialPageRoute(
                             builder: (context) => BlocProvider(
                               create: (context) => RegisterBloc(),
-                              child: RegisterScreen(),
+                              child: const RegisterScreen(),
                             ),
                           ),
                         );
                       },
-                      child: const Text(
-                        "Register",
-                        style: TextStyle(
+                      child: Text(
+                        'register'.tr(),
+                        style: const TextStyle(
                           decoration: TextDecoration.underline,
                           fontSize: 18,
                           color: Colors.indigo,
@@ -183,10 +184,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     MaterialButton(
                       color: Colors.indigo,
                       textColor: Colors.white,
-                      child: const Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                        child: Text("Login", style: TextStyle(fontSize: 22)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 10),
+                        child: Text('login'.tr(),
+                            style: const TextStyle(fontSize: 22)),
                       ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
@@ -214,17 +216,17 @@ class _LoginScreenState extends State<LoginScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('User Not Registered'),
-          content: const Text('Would you like to register?'),
+          title: Text('user_not_registered'.tr()),
+          content: Text('would_you_like_to_register'.tr()),
           actions: [
             TextButton(
-              child: const Text('Cancel'),
+              child: Text('cancel'.tr()),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Register'),
+              child: Text('register'.tr()),
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.push(
@@ -232,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   MaterialPageRoute(
                     builder: (context) => BlocProvider(
                       create: (context) => RegisterBloc(),
-                      child: RegisterScreen(),
+                      child: const RegisterScreen(),
                     ),
                   ),
                 );

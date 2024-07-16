@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:osama_hasan_progress_soft/presentation/home_screen/bloc/home_bloc.dart';
@@ -33,10 +34,10 @@ class _HomeTabState extends State<HomeTab> {
           TextFormField(
             keyboardType: TextInputType.name,
             onChanged: _onSearchChanged,
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              labelText: "Search",
-              border: OutlineInputBorder(
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              labelText: 'search'.tr(),
+              border: const OutlineInputBorder(
                 borderSide: BorderSide(),
                 borderRadius: BorderRadius.all(Radius.circular(4)),
               ),
@@ -63,10 +64,10 @@ class _HomeTabState extends State<HomeTab> {
                     },
                   );
                 } else if (state is GetPostErrorState) {
-                  return const Center(
+                  return Center(
                     child: Text(
-                      "Error",
-                      style: TextStyle(
+                      'error'.tr(),
+                      style: const TextStyle(
                         color: Colors.red,
                         fontSize: 30,
                         fontWeight: FontWeight.bold,

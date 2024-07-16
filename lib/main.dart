@@ -2,10 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:osama_hasan_progress_soft/di/injection.dart';
 import 'package:osama_hasan_progress_soft/presentation/splash_screen/splash_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 Future<void> main() async {
   await MyApp.initApp();
-  runApp(const MyApp());
+  runApp(EasyLocalization(
+      supportedLocales: const [Locale('en', 'US'), Locale('ar', 'JO')],
+      path: 'assets/translations',
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,15 +18,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: false,
         ),
-        home: SplashScreen());
+        home: const SplashScreen());
   }
 
   static Future initApp() async {
     WidgetsFlutterBinding.ensureInitialized();
+    await EasyLocalization.ensureInitialized();
+
     configureDependencies();
     await Firebase.initializeApp(
         options: const FirebaseOptions(

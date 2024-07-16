@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:osama_hasan_progress_soft/presentation/home_screen/bloc/home_bloc.dart';
@@ -30,7 +31,7 @@ class _ProfileTabState extends State<ProfileTab> {
               MaterialPageRoute(
                 builder: (context) => BlocProvider(
                   create: (context) => LoginBloc(),
-                  child: LoginScreen(),
+                  child: const LoginScreen(),
                 ),
               ),
               (route) => false,
@@ -83,10 +84,11 @@ class _ProfileTabState extends State<ProfileTab> {
                   MaterialButton(
                     color: Colors.indigo,
                     textColor: Colors.white,
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                      child: Text("Logout", style: TextStyle(fontSize: 22)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
+                      child: Text('logout'.tr(),
+                          style: const TextStyle(fontSize: 22)),
                     ),
                     onPressed: () {
                       context.read<HomeBloc>().add(UserLogoutEvent());

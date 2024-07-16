@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:osama_hasan_progress_soft/presentation/login_screen/bloc/login_bloc.dart';
@@ -61,25 +62,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   showDialog(
                       context: context,
                       builder: (context) => SmartAlertDialog(
-                            title: "Error",
-                            message: "OTP verification failed",
+                            title: 'error'.tr(),
+                            message: 'otp_failed_verification'.tr(),
                             text: AlertDialogText(
-                                cancel: "Close", dismiss: "", confirm: ""),
+                                cancel: 'close'.tr(), dismiss: "", confirm: ""),
                           ));
                 }
               } else if (state is RegisterFailureState) {
                 showDialog(
                     context: context,
                     builder: (context) => SmartAlertDialog(
-                          title: "Error",
+                          title: 'error'.tr(),
                           message: state.error,
                           text: AlertDialogText(
-                              cancel: "Close", confirm: "", dismiss: ""),
+                              cancel: 'close'.tr(), confirm: "", dismiss: ""),
                         ));
               } else if (state is RegisterSuccessState) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Registration successful"),
+                  SnackBar(
+                    content: Text('registration_successful'.tr()),
                     backgroundColor: Colors.green,
                   ),
                 );
@@ -88,7 +89,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     MaterialPageRoute(
                       builder: (context) => BlocProvider(
                         create: (context) => LoginBloc(),
-                        child: LoginScreen(),
+                        child: const LoginScreen(),
                       ),
                     ));
               }
@@ -118,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       controller: _nameController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your name';
+                          return 'please_enter_you_name'.tr();
                         }
                         return null;
                       },
@@ -126,13 +127,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(height: 20),
                     TextFormField(
                       keyboardType: TextInputType.phone,
-                      decoration: const InputDecoration(
-                        labelText: "Mobile number",
-                        border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                        labelText: 'mobile_number'.tr(),
+                        border: const OutlineInputBorder(
                           borderSide: BorderSide(),
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                         ),
-                        errorBorder: OutlineInputBorder(
+                        errorBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.red, width: 2),
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                         ),
@@ -140,11 +141,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       controller: _mobileController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your mobile number';
+                          return 'please_enter_mobile'.tr();
                         }
                         if (!RegExp(context.read<RegisterBloc>().mobileRegex!)
                             .hasMatch(value)) {
-                          return 'Please enter a valid mobile number starting with +9627';
+                          return 'valid_mobile_msg'.tr();
                         }
                         return null;
                       },
@@ -168,13 +169,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(height: 10),
                     TextFormField(
                       obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: "Password",
-                        border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                        labelText: 'password'.tr(),
+                        border: const OutlineInputBorder(
                           borderSide: BorderSide(),
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                         ),
-                        errorBorder: OutlineInputBorder(
+                        errorBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.red, width: 2),
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                         ),
@@ -182,13 +183,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       controller: _passwordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
+                          return 'please_enter_password'.tr();
                         }
                         if (!RegExp(
                                 context.read<RegisterBloc>().passwordRegex ??
                                     "")
                             .hasMatch(value)) {
-                          return 'Password with min 8 characters, letters and numbers';
+                          return 'valid_password_msg'.tr();
                         }
                         return null;
                       },
@@ -196,13 +197,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(height: 15),
                     TextFormField(
                       obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: "Confirm Password",
-                        border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                        labelText: 'confirm_password'.tr(),
+                        border: const OutlineInputBorder(
                           borderSide: BorderSide(),
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                         ),
-                        errorBorder: OutlineInputBorder(
+                        errorBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.red, width: 2),
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                         ),
@@ -210,10 +211,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       controller: _confirmPasswordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please re-enter your password';
+                          return 're_enter_password'.tr();
                         }
                         if (value != _passwordController.value.text) {
-                          return 'Passwords do not match';
+                          return 'password_no_match'.tr();
                         }
                         return null;
                       },
@@ -222,10 +223,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     MaterialButton(
                       color: Colors.indigo,
                       textColor: Colors.white,
-                      child: const Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                        child: Text("Register", style: TextStyle(fontSize: 22)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 10),
+                        child: Text('register'.tr(),
+                            style: const TextStyle(fontSize: 22)),
                       ),
                       onPressed: () {
                         if (_formKey.currentState?.validate() ?? false) {
