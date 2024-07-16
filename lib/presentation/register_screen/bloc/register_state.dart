@@ -1,6 +1,5 @@
 part of 'register_bloc.dart';
 
-// register_state.dart
 abstract class RegisterState {}
 
 class RegisterInitialState extends RegisterState {}

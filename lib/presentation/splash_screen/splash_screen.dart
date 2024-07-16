@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:osama_hasan_progress_soft/presentation/home_screen/bloc/home_bloc.dart';
+import 'package:osama_hasan_progress_soft/presentation/home_screen/home_screen.dart';
 import 'package:osama_hasan_progress_soft/presentation/login_screen/bloc/login_bloc.dart';
 import 'package:osama_hasan_progress_soft/presentation/login_screen/login_screen.dart';
 import 'package:osama_hasan_progress_soft/util/assets.dart';
@@ -25,10 +27,10 @@ class _SplashScreenState extends State<SplashScreen> {
     isConfigDataLoaded().then((value) {
       if (!value) {
         _loadConfigData().whenComplete(() {
-          navigateToLoginScreen();
+          navigateToNextScreen();
         });
       } else {
-        navigateToLoginScreen();
+        navigateToNextScreen();
       }
     });
   }
@@ -44,16 +46,26 @@ class _SplashScreenState extends State<SplashScreen> {
     return mobileRegex.isNotEmpty && passwordRegex.isNotEmpty;
   }
 
-  void navigateToLoginScreen() {
+  Future<void> navigateToNextScreen() async {
+    bool? userLoggedIn = await SharedPreferencesHelper.instance
+        .getBool(SharedPrefsConstants.userLoggedIn);
+
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => BlocProvider(
-              create: (context) => LoginBloc(),
-              child: LoginScreen(),
-            ),
-          ));
+          (userLoggedIn ?? false)
+              ? MaterialPageRoute(
+                  builder: (context) => BlocProvider(
+                    create: (context) => HomeBloc(),
+                    child: HomeScreen(),
+                  ),
+                )
+              : MaterialPageRoute(
+                  builder: (context) => BlocProvider(
+                    create: (context) => LoginBloc(),
+                    child: LoginScreen(),
+                  ),
+                ));
     });
   }
 

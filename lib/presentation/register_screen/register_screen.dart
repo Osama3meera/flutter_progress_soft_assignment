@@ -1,4 +1,3 @@
-// register_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:osama_hasan_progress_soft/presentation/login_screen/bloc/login_bloc.dart';
@@ -52,6 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Register Screen"),
+        backgroundColor: Colors.indigo,
       ),
       body: Padding(
         padding: const EdgeInsets.all(12),
@@ -63,7 +63,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               _navigateToOtpScreen(state.verificationId);
 
               if (otpVerified) {
-                // Proceed with completing the registration
                 context.read<RegisterBloc>().add(RegisterCompletedEvent(
                       password: _passwordController.text.trim(),
                       name: _nameController.text.trim(),
@@ -230,7 +229,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 30),
                   MaterialButton(
-                    color: Colors.blue,
+                    color: Colors.indigo,
                     textColor: Colors.white,
                     child: const Padding(
                       padding:

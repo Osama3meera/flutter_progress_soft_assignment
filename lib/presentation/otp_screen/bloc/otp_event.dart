@@ -1,6 +1,5 @@
 part of 'otp_bloc.dart';
 
-// otp_event.dart
 abstract class OtpEvent {}
 
 class OtpVerifyEvent extends OtpEvent {

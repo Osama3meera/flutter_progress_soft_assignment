@@ -1,6 +1,5 @@
 part of 'register_bloc.dart';
 
-// register_event.dart
 abstract class RegisterEvent {}
 
 class RegisterStartedEvent extends RegisterEvent {

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="osama_hasan_progress_soft"
+        android:label="Osama Hasan Progress Soft"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
