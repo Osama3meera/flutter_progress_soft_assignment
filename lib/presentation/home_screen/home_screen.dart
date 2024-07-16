@@ -15,16 +15,18 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Home Screen"),
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.indigo.shade300,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: BlocConsumer<HomeBloc, HomeState>(
-          listener: (context, state) {
-          },
-          builder: (context, state) {
-            return Column();
-          },
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: BlocConsumer<HomeBloc, HomeState>(
+            listener: (context, state) {
+            },
+            builder: (context, state) {
+              return Column();
+            },
+          ),
         ),
       ),
     );

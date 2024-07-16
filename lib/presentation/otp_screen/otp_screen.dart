@@ -22,77 +22,79 @@ class _OtpScreenState extends State<OtpScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("OTP Screen"),
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.indigo.shade300,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: BlocConsumer<OtpBloc, OtpState>(
-          listener: (context, state) {
-            if (state is OtpVerifiedState) {
-              Navigator.pop(context, true);
-            } else if (state is OtpFailureState) {
-              showDialog(
-                  context: context,
-                  builder: (context) => SmartAlertDialog(
-                        title: "Error",
-                        message: state.error,
-                        text: AlertDialogText(cancel: "Close", confirm: "", dismiss: ""),
-                      ));
-            }
-          },
-          builder: (context, state) {
-            return Column(
-              children: [
-                const SizedBox(height: 40),
-                Form(
-                  key: _formKey,
-                  child: TextFormField(
-                    controller: _otpController,
-                    maxLength: 6,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: "OTP",
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(),
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: BlocConsumer<OtpBloc, OtpState>(
+            listener: (context, state) {
+              if (state is OtpVerifiedState) {
+                Navigator.pop(context, true);
+              } else if (state is OtpFailureState) {
+                showDialog(
+                    context: context,
+                    builder: (context) => SmartAlertDialog(
+                          title: "Error",
+                          message: state.error,
+                          text: AlertDialogText(cancel: "Close", confirm: "", dismiss: ""),
+                        ));
+              }
+            },
+            builder: (context, state) {
+              return Column(
+                children: [
+                  const SizedBox(height: 40),
+                  Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      controller: _otpController,
+                      maxLength: 6,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: "OTP",
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(),
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red, width: 2),
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                        ),
                       ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2),
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter OTP';
+                        } else if (value.length < 6) {
+                          return 'Please enter 6 characters';
+                        }
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter OTP';
-                      } else if (value.length < 6) {
-                        return 'Please enter 6 characters';
+                  ),
+                  const SizedBox(height: 30),
+                  MaterialButton(
+                    color: Colors.blue,
+                    textColor: Colors.white,
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                      child: Text("Verify", style: TextStyle(fontSize: 22)),
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        context.read<OtpBloc>().add(
+                              OtpVerifyEvent(
+                                verificationId: widget.verificationId,
+                                otp: _otpController.text.trim(),
+                              ),
+                            );
                       }
-                      return null;
                     },
                   ),
-                ),
-                const SizedBox(height: 30),
-                MaterialButton(
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                    child: Text("Verify", style: TextStyle(fontSize: 22)),
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      context.read<OtpBloc>().add(
-                            OtpVerifyEvent(
-                              verificationId: widget.verificationId,
-                              otp: _otpController.text.trim(),
-                            ),
-                          );
-                    }
-                  },
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

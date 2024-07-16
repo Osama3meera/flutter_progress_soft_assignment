@@ -51,204 +51,206 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Register Screen"),
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.indigo.shade300,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: BlocConsumer<RegisterBloc, RegisterState>(
-          listener: (context, state) async {
-            if (state is RegisterOtpSentState) {
-              bool otpVerified =
-                  await _navigateToOtpScreen(state.verificationId);
-              _navigateToOtpScreen(state.verificationId);
-
-              if (otpVerified) {
-                context.read<RegisterBloc>().add(RegisterCompletedEvent(
-                      password: _passwordController.text.trim(),
-                      name: _nameController.text.trim(),
-                      mobile: _mobileController.text.trim(),
-                      age: selectedAge,
-                      gender: selectedGender,
-                    ));
-              } else {
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: BlocConsumer<RegisterBloc, RegisterState>(
+            listener: (context, state) async {
+              if (state is RegisterOtpSentState) {
+                bool otpVerified =
+                    await _navigateToOtpScreen(state.verificationId);
+                _navigateToOtpScreen(state.verificationId);
+        
+                if (otpVerified) {
+                  context.read<RegisterBloc>().add(RegisterCompletedEvent(
+                        password: _passwordController.text.trim(),
+                        name: _nameController.text.trim(),
+                        mobile: _mobileController.text.trim(),
+                        age: selectedAge,
+                        gender: selectedGender,
+                      ));
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (context) => SmartAlertDialog(
+                            title: "Error",
+                            message: "OTP verification failed",
+                            text: AlertDialogText(
+                                cancel: "Close", dismiss: "", confirm: ""),
+                          ));
+                }
+              } else if (state is RegisterFailureState) {
                 showDialog(
                     context: context,
                     builder: (context) => SmartAlertDialog(
                           title: "Error",
-                          message: "OTP verification failed",
+                          message: state.error,
                           text: AlertDialogText(
-                              cancel: "Close", dismiss: "", confirm: ""),
+                              cancel: "Close", confirm: "", dismiss: ""),
                         ));
+              } else if (state is RegisterSuccessState) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Registration successful"),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                        create: (context) => LoginBloc(),
+                        child: LoginScreen(),
+                      ),
+                    ));
               }
-            } else if (state is RegisterFailureState) {
-              showDialog(
-                  context: context,
-                  builder: (context) => SmartAlertDialog(
-                        title: "Error",
-                        message: state.error,
-                        text: AlertDialogText(
-                            cancel: "Close", confirm: "", dismiss: ""),
-                      ));
-            } else if (state is RegisterSuccessState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Registration successful"),
-                  backgroundColor: Colors.green,
+            },
+            builder: (context, state) {
+              if (state is RegisterLoadingState) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 40),
+                    TextFormField(
+                      keyboardType: TextInputType.name,
+                      decoration: const InputDecoration(
+                        labelText: "Name",
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(),
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red, width: 2),
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                        ),
+                      ),
+                      controller: _nameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your name';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      keyboardType: TextInputType.phone,
+                      decoration: const InputDecoration(
+                        labelText: "Mobile number",
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(),
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red, width: 2),
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                        ),
+                      ),
+                      controller: _mobileController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your mobile number';
+                        }
+                        if (!RegExp(mobileRegex!).hasMatch(value)) {
+                          return 'Invalid mobile number';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    AgePickerDropdown(
+                      onChanged: (value) {
+                        setState(() {
+                          selectedAge = value;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    GenderPickerDropdown(
+                      onChanged: (value) {
+                        setState(() {
+                          selectedGender = value;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        labelText: "Password",
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(),
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red, width: 2),
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                        ),
+                      ),
+                      controller: _passwordController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        if (!RegExp(passwordRegex ?? "").hasMatch(value)) {
+                          return 'Invalid password';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    TextFormField(
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        labelText: "Confirm Password",
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(),
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red, width: 2),
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                        ),
+                      ),
+                      controller: _confirmPasswordController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please re-enter your password';
+                        }
+                        if (value != _passwordController.value.text) {
+                          return 'Passwords do not match';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 30),
+                    MaterialButton(
+                      color: Colors.indigo,
+                      textColor: Colors.white,
+                      child: const Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                        child: Text("Register", style: TextStyle(fontSize: 22)),
+                      ),
+                      onPressed: () {
+                        if (_formKey.currentState?.validate() ?? false) {
+                          context.read<RegisterBloc>().add(
+                                RegisterStartedEvent(
+                                    _mobileController.text.trim()),
+                              );
+                        }
+                      },
+                    )
+                  ],
                 ),
               );
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => LoginBloc(),
-                      child: LoginScreen(),
-                    ),
-                  ));
-            }
-          },
-          builder: (context, state) {
-            if (state is RegisterLoadingState) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  const SizedBox(height: 40),
-                  TextFormField(
-                    keyboardType: TextInputType.name,
-                    decoration: const InputDecoration(
-                      labelText: "Name",
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(),
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2),
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                      ),
-                    ),
-                    controller: _nameController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your name';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(
-                      labelText: "Mobile number",
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(),
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2),
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                      ),
-                    ),
-                    controller: _mobileController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your mobile number';
-                      }
-                      if (!RegExp(mobileRegex!).hasMatch(value)) {
-                        return 'Invalid mobile number';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  AgePickerDropdown(
-                    onChanged: (value) {
-                      setState(() {
-                        selectedAge = value;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  GenderPickerDropdown(
-                    onChanged: (value) {
-                      setState(() {
-                        selectedGender = value;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: "Password",
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(),
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2),
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                      ),
-                    ),
-                    controller: _passwordController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      }
-                      if (!RegExp(passwordRegex ?? "").hasMatch(value)) {
-                        return 'Invalid password';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 15),
-                  TextFormField(
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: "Confirm Password",
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(),
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2),
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                      ),
-                    ),
-                    controller: _confirmPasswordController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please re-enter your password';
-                      }
-                      if (value != _passwordController.value.text) {
-                        return 'Passwords do not match';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                  MaterialButton(
-                    color: Colors.indigo,
-                    textColor: Colors.white,
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                      child: Text("Register", style: TextStyle(fontSize: 22)),
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        context.read<RegisterBloc>().add(
-                              RegisterStartedEvent(
-                                  _mobileController.text.trim()),
-                            );
-                      }
-                    },
-                  )
-                ],
-              ),
-            );
-          },
+            },
+          ),
         ),
       ),
     );
