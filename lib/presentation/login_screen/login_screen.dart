@@ -116,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                         if (!RegExp(context.read<LoginBloc>().mobileRegex ?? "")
                             .hasMatch(value)) {
-                          return 'Invalid mobile number';
+                          return 'Please enter a valid mobile number starting with +9627';
                         }
                         return null;
                       },
@@ -144,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                         if (!RegExp(context.read<LoginBloc>().passwordRegex ?? "")
                             .hasMatch(value)) {
-                          return 'Invalid password';
+                          return 'Password with min 8 characters, letters and numbers';
                         }
                         return null;
                       },

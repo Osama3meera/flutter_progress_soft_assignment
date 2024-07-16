@@ -17,6 +17,8 @@ class RegisterFailureEvent extends RegisterEvent {
   RegisterFailureEvent(this.error);
 }
 
+class LoadRegexRegisterEvent extends RegisterEvent {}
+
 class RegisterSuccessEvent extends RegisterEvent {}
 
 class RegisterCompletedEvent extends RegisterEvent {

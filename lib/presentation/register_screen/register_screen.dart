@@ -5,8 +5,6 @@ import 'package:osama_hasan_progress_soft/presentation/login_screen/login_screen
 import 'package:osama_hasan_progress_soft/presentation/otp_screen/bloc/otp_bloc.dart';
 import 'package:osama_hasan_progress_soft/presentation/otp_screen/otp_screen.dart';
 import 'package:osama_hasan_progress_soft/presentation/register_screen/bloc/register_bloc.dart';
-import 'package:osama_hasan_progress_soft/util/shared_preference/share_preference_helper.dart';
-import 'package:osama_hasan_progress_soft/util/shared_preference/shared_prefs_constants.dart';
 import 'package:osama_hasan_progress_soft/widgets/age_picker_dropdown.dart';
 import 'package:osama_hasan_progress_soft/widgets/gender_picker_dropdown.dart';
 import 'package:smart_alert_dialog/models/alert_dialog_text.dart';
@@ -27,23 +25,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _confirmPasswordController = TextEditingController();
   int selectedAge = 18;
   String selectedGender = "male";
-  String? mobileRegex = "";
-  String? passwordRegex = "";
 
   @override
   void initState() {
     super.initState();
-    getRegex();
-  }
-
-  Future<void> getRegex() async {
-    mobileRegex = await SharedPreferencesHelper.instance
-            .getString(SharedPrefsConstants.mobileRegex) ??
-        "";
-
-    passwordRegex = await SharedPreferencesHelper.instance
-            .getString(SharedPrefsConstants.passwordRegex) ??
-        "";
+    context.read<RegisterBloc>().add(LoadRegexRegisterEvent());
   }
 
   @override
@@ -62,7 +48,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 bool otpVerified =
                     await _navigateToOtpScreen(state.verificationId);
                 _navigateToOtpScreen(state.verificationId);
-        
+
                 if (otpVerified) {
                   context.read<RegisterBloc>().add(RegisterCompletedEvent(
                         password: _passwordController.text.trim(),
@@ -137,7 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 20),
                     TextFormField(
                       keyboardType: TextInputType.phone,
                       decoration: const InputDecoration(
@@ -156,8 +142,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your mobile number';
                         }
-                        if (!RegExp(mobileRegex!).hasMatch(value)) {
-                          return 'Invalid mobile number';
+                        if (!RegExp(context.read<RegisterBloc>().mobileRegex!)
+                            .hasMatch(value)) {
+                          return 'Please enter a valid mobile number starting with +9627';
                         }
                         return null;
                       },
@@ -197,8 +184,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
                         }
-                        if (!RegExp(passwordRegex ?? "").hasMatch(value)) {
-                          return 'Invalid password';
+                        if (!RegExp(
+                                context.read<RegisterBloc>().passwordRegex ??
+                                    "")
+                            .hasMatch(value)) {
+                          return 'Password with min 8 characters, letters and numbers';
                         }
                         return null;
                       },
