@@ -13,12 +13,12 @@ class _HomeTabState extends State<HomeTab> {
   @override
   void initState() {
     super.initState();
-    context.read<HomeBloc>().add(GetPostsStarted());
+    context.read<HomeBloc>().add(GetPostsStartedEvent());
   }
 
   void _onSearchChanged(String query) {
     if (query.isEmpty) {
-      context.read<HomeBloc>().add(GetPostsStarted());
+      context.read<HomeBloc>().add(GetPostsStartedEvent());
     } else {
       context.read<HomeBloc>().add(FilterPostsEvent(query));
     }
@@ -46,6 +46,10 @@ class _HomeTabState extends State<HomeTab> {
           Expanded(
             child: BlocConsumer<HomeBloc, HomeState>(
               listener: (context, state) {},
+              buildWhen: (previous, current) =>
+                  current is GetPostSuccessState ||
+                  current is GetPostErrorState ||
+                  current is GetPostLoadingState,
               builder: (context, state) {
                 if (state is GetPostSuccessState) {
                   return ListView.builder(

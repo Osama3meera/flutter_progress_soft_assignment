@@ -3,12 +3,12 @@ part of 'home_bloc.dart';
 @immutable
 sealed class HomeEvent {}
 
-class GetPostsStarted extends HomeEvent {}
+class GetPostsStartedEvent extends HomeEvent {}
 
-class GetPostsSuccess extends HomeEvent {
+class GetPostsSuccessEvent extends HomeEvent {
   final List<Post> posts;
 
-  GetPostsSuccess(this.posts);
+  GetPostsSuccessEvent(this.posts);
 }
 
 class GetPostsFailed extends HomeEvent {
@@ -22,3 +22,16 @@ class FilterPostsEvent extends HomeEvent {
 
   FilterPostsEvent(this.query);
 }
+
+class GetUserInfoEvent extends HomeEvent {}
+
+class GetUserInfoSuccessEvent extends HomeEvent {
+  final int age;
+  final String gender;
+  final String mobile;
+  final String name;
+
+  GetUserInfoSuccessEvent(this.age, this.gender, this.mobile, this.name);
+}
+
+class UserLogoutEvent extends HomeEvent {}

@@ -6,6 +6,8 @@ import 'package:osama_hasan_progress_soft/presentation/login_screen/bloc/login_b
 import 'package:osama_hasan_progress_soft/presentation/register_screen/bloc/register_bloc.dart';
 import 'package:osama_hasan_progress_soft/presentation/register_screen/register_screen.dart';
 import 'package:osama_hasan_progress_soft/util/assets.dart';
+import 'package:osama_hasan_progress_soft/util/shared_preference/share_preference_helper.dart';
+import 'package:osama_hasan_progress_soft/util/shared_preference/shared_prefs_constants.dart';
 import 'package:smart_alert_dialog/models/alert_dialog_text.dart';
 import 'package:smart_alert_dialog/smart_alert_dialog.dart';
 
@@ -47,17 +49,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     backgroundColor: Colors.green,
                   ),
                 );
-        
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => HomeBloc(),
-                      child: HomeScreen(),
-                    ),
-                  ),
-                  (route) => false,
-                );
+
+                saveMobileNumber()
+                    .whenComplete(() => Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider(
+                              create: (context) => HomeBloc(),
+                              child: HomeScreen(),
+                            ),
+                          ),
+                          (route) => false,
+                        ));
               } else if (state is LoginFailureState) {
                 showDialog(
                     context: context,
@@ -142,7 +145,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
                         }
-                        if (!RegExp(context.read<LoginBloc>().passwordRegex ?? "")
+                        if (!RegExp(
+                                context.read<LoginBloc>().passwordRegex ?? "")
                             .hasMatch(value)) {
                           return 'Password with min 8 characters, letters and numbers';
                         }
@@ -238,5 +242,10 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       },
     );
+  }
+
+  Future<void> saveMobileNumber() async {
+    await SharedPreferencesHelper.instance.saveString(
+        SharedPrefsConstants.userMobileNumber, _mobileController.text);
   }
 }

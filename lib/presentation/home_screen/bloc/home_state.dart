@@ -18,3 +18,14 @@ class GetPostErrorState extends HomeState {
 
   GetPostErrorState(this.exception);
 }
+
+class GetUserInfoSuccessState extends HomeState {
+  final int age;
+  final String gender;
+  final String mobile;
+  final String name;
+
+  GetUserInfoSuccessState(this.age, this.gender, this.mobile, this.name);
+}
+
+class UserLogoutState extends HomeState {}
