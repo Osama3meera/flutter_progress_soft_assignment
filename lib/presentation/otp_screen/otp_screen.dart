@@ -22,7 +22,7 @@ class _OtpScreenState extends State<OtpScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("OTP Screen"),
-        backgroundColor: Colors.indigo.shade300,
+        backgroundColor: Colors.indigo.shade700,
       ),
       body: SingleChildScrollView(
         child: Padding(

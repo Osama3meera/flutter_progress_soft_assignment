@@ -17,11 +17,9 @@ class _ProfileTabState extends State<ProfileTab> {
         padding: const EdgeInsets.all(12),
         child: BlocConsumer<HomeBloc, HomeState>(
           listener: (context, state) {
-            // Listener logic here
           },
           builder: (context, state) {
-            // Builder logic here
-            return Column(
+            return const Column(
               children: [Text('Profle Screen')],
             );
           },

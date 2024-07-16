@@ -37,7 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Register Screen"),
-        backgroundColor: Colors.indigo.shade300,
+        backgroundColor: Colors.indigo.shade700,
       ),
       body: SingleChildScrollView(
         child: Padding(

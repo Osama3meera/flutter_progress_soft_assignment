@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home Screen"),
-        backgroundColor: Colors.indigo.shade300,
+        backgroundColor: Colors.indigo.shade700,
       ),
       body: IndexedStack(
         index: _selectedIndex,
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.indigo.shade300,
+        selectedItemColor: Colors.indigo.shade700,
         onTap: _onItemTapped,
       ),
     );

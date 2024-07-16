@@ -16,3 +16,9 @@ class GetPostsFailed extends HomeEvent {
 
   GetPostsFailed(this.exception);
 }
+
+class FilterPostsEvent extends HomeEvent {
+  final String query;
+
+  FilterPostsEvent(this.query);
+}

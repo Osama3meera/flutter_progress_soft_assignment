@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Login Screen"),
-        backgroundColor: Colors.indigo.shade300,
+        backgroundColor: Colors.indigo.shade700,
       ),
       body: SingleChildScrollView(
         child: Padding(

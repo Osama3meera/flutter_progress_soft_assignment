@@ -16,38 +16,67 @@ class _HomeTabState extends State<HomeTab> {
     context.read<HomeBloc>().add(GetPostsStarted());
   }
 
+  void _onSearchChanged(String query) {
+    if (query.isEmpty) {
+      context.read<HomeBloc>().add(GetPostsStarted());
+    } else {
+      context.read<HomeBloc>().add(FilterPostsEvent(query));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12),
-      child: BlocConsumer<HomeBloc, HomeState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          if (state is GetPostSuccessState) {
-            return ListView.builder(
-              itemCount: state.posts.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(state.posts[index].title),
-                  subtitle: Text(state.posts[index].body),
-                  trailing: Text(state.posts[index].id.toString()),
-                );
+      child: Column(
+        children: [
+          TextFormField(
+            keyboardType: TextInputType.name,
+            onChanged: _onSearchChanged,
+            decoration: const InputDecoration(
+              prefixIcon: Icon(Icons.search),
+              labelText: "Search",
+              border: OutlineInputBorder(
+                borderSide: BorderSide(),
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Expanded(
+            child: BlocConsumer<HomeBloc, HomeState>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                if (state is GetPostSuccessState) {
+                  return ListView.builder(
+                    itemCount: state.posts.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(state.posts[index].title),
+                        subtitle: Text(state.posts[index].body),
+                        trailing: Text(state.posts[index].id.toString()),
+                      );
+                    },
+                  );
+                } else if (state is GetPostErrorState) {
+                  return const Center(
+                    child: Text(
+                      "Error",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+                } else if (state is GetPostLoadingState) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return Container();
               },
-            );
-          } else if (state is GetPostErrorState) {
-            return const Center(
-                child: Text(
-              "Error",
-              style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold),
-            ));
-          } else if (state is GetPostLoadingState) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return Container();
-        },
+            ),
+          ),
+        ],
       ),
     );
   }
